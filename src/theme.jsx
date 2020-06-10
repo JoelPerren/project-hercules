@@ -15,7 +15,6 @@ let theme = createMuiTheme({
     },
   },
   typography: {
-    htmlFontSize: 16, //default
     h1: {
       fontFamily: "'Roboto Condensed', sans-serif",
       fontWeight: 700,
@@ -26,7 +25,10 @@ let theme = createMuiTheme({
       fontFamily: "'Roboto Condensed', sans-serif",
       fontWeight: 700,
       lineHeight: 1.1,
-      letterSpacing: "0.005em",
+    },
+    h3: {
+      fontFamily: "'Roboto Condensed', sans-serif",
+      fontWeight: 700,
     },
   },
 });

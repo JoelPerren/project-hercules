@@ -2,8 +2,9 @@ import React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Cssbaseline from "@material-ui/core/CssBaseline";
 import theme from "./theme";
-import Navbar from "./Navbar";
+import Navbar from "./components/Navbar";
 import LandingPage from "./LandingPage";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <Cssbaseline />
       <Navbar />
       <LandingPage />
+      <Footer />
     </ThemeProvider>
   );
 };

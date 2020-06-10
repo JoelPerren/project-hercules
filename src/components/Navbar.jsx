@@ -8,7 +8,7 @@ import {
   Toolbar,
   SvgIcon,
 } from "@material-ui/core";
-import { ReactComponent as LogoSvg } from "./svg/dark-logo.svg";
+import { ReactComponent as LogoSvg } from "../svg/dark-logo.svg";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
