@@ -7,7 +7,6 @@ import {
   Avatar,
   Typography,
 } from "@material-ui/core";
-// import UpdateIcon from "@material-ui/icons/Update";
 
 const useStyles = makeStyles((theme) => ({
   feature_card: {
