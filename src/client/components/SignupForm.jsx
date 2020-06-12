@@ -8,7 +8,6 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
-import { breakpoints } from "@material-ui/system";
 
 const useStyles = makeStyles((theme) => ({
   hero_box: {

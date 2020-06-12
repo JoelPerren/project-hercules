@@ -85,7 +85,13 @@ function Features() {
             </Typography>
           </Grid>
           {featureCards.map((card, index) => (
-            <Grid item xs={12} md={4} className={classes.feature_card}>
+            <Grid
+              item
+              xs={12}
+              md={4}
+              className={classes.feature_card}
+              key={index}
+            >
               <FeatureCard
                 key={index}
                 icon={card.icon}
