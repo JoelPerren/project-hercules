@@ -3,6 +3,7 @@
 "use strict";
 
 const express = require("express");
+const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
 const routes = require("./routes");
@@ -10,7 +11,21 @@ const routes = require("./routes");
 // Create the Express app.
 const app = express();
 
-// Setup request body JSON parsing.
+// Connect to MongoDB
+mongoose.connect("mongodb://localhost/HerculesDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+mongoose.connection
+  .once("open", () => {
+    console.log("Connected to HerculesDB");
+  })
+  .on("error", (e) => {
+    console.log("Connection error: ", e);
+  });
+
+// Setup request body JSON parsing and CORS settings.
 app.use(express.json(), cors({ credentials: true }));
 
 // Setup morgan which gives us HTTP request logging.

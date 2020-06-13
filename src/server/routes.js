@@ -1,13 +1,15 @@
 "use strict";
 
 const express = require("express");
+const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 const auth = require("basic-auth");
 const { check, validationResult } = require("express-validator");
+const Users = require("./models/users");
 
 // This array is used to keep track of user records
 // as they are created.
-const users = [];
+// const users = [];
 
 // Construct a router instance.
 const router = express.Router();
@@ -19,9 +21,9 @@ router.post(
     check("name")
       .exists({ checkNull: true, checkFalsy: true })
       .withMessage('Please provide a value for "name"'),
-    check("username")
+    check("email")
       .exists({ checkNull: true, checkFalsy: true })
-      .withMessage('Please provide a value for "username"'),
+      .withMessage('Please provide a value for "email"'),
     check("password")
       .exists({ checkNull: true, checkFalsy: true })
       .withMessage('Please provide a value for "password"'),
@@ -40,16 +42,17 @@ router.post(
     }
 
     // Get the user from the request body.
-    const user = req.body;
+    const newUser = req.body;
 
     //Hash the new user's password
-    user.password = bcryptjs.hashSync(user.password);
+    newUser.password = bcryptjs.hashSync(newUser.password);
 
-    // Add the user to the `users` array.
-    users.push(user);
-
-    // Set the status to 201 Created and end the response.
-    res.status(201).end();
+    // Add the user to the `users` collection in HerculesDB.
+    const addUser = new Users(newUser);
+    addUser.save().then(() => {
+      // Set the status to 201 Created and end the response.
+      res.status(201).end();
+    });
   }
 );
 
