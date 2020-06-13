@@ -1,45 +1,33 @@
-// https://teamtreehouse.com/library/rest-api-authentication-with-express
-
-"use strict";
-
 const express = require("express");
-const mongoose = require("mongoose");
+const expressValidator = require("express-validator");
 const morgan = require("morgan");
 const cors = require("cors");
-const routes = require("./routes");
+const connectDB = require("./config/db");
+
+// Setup DotEnv config
+require("dotenv").config({
+  path: "./src/server/config/config.env",
+});
+
+// Connect to Database
+connectDB();
+
+// Import routes
+const users = require("./routes/users");
 
 // Create the Express app.
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect("mongodb://localhost/HerculesDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Setup morgan which gives us HTTP request logging
+// Setup CORS
+// Setup request body JSON parsing
+app.use(express.json(), cors({ credentials: true }), morgan("dev"));
 
-mongoose.connection
-  .once("open", () => {
-    console.log("Connected to HerculesDB");
-  })
-  .on("error", (e) => {
-    console.log("Connection error: ", e);
-  });
+// Setup a friendly greeting for the root route
+app.get("/", (req, res) => res.send("Welcome to the root of HerculesDB"));
 
-// Setup request body JSON parsing and CORS settings.
-app.use(express.json(), cors({ credentials: true }));
-
-// Setup morgan which gives us HTTP request logging.
-app.use(morgan("dev"));
-
-// Setup a friendly greeting for the root route.
-app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome to the REST API Authentication with Express project!",
-  });
-});
-
-// Add routes route
-app.use("/v1", routes);
+// Add users route
+app.use("/api/v1/users", users);
 
 // Send 404 if no other route matched.
 app.use((req, res) => {
@@ -48,20 +36,11 @@ app.use((req, res) => {
   });
 });
 
-// Setup a global error handler.
-app.use((err, req, res, next) => {
-  console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
-
-  res.status(500).json({
-    message: err.message,
-    error: process.env.NODE_ENV === "production" ? {} : err,
-  });
-});
-
 // Set our port.
-app.set("port", process.env.PORT || 5000);
+const PORT = process.env.PORT || 5000;
 
 // Start listening on our port.
-const server = app.listen(app.get("port"), () => {
-  console.log(`Express server is listening on port ${server.address().port}`);
-});
+app.listen(
+  PORT,
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);
