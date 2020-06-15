@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   makeStyles,
   Card,
   CardContent,
-  Box,
   Typography,
   TextField,
   Button,
 } from "@material-ui/core";
+import { createUser } from "../utils/auth-client";
 
 const useStyles = makeStyles((theme) => ({
   hero_box: {
@@ -24,8 +24,33 @@ const useStyles = makeStyles((theme) => ({
 
 function SignupForm() {
   const classes = useStyles();
+  const [values, setValues] = useState({
+    userName: "",
+    email: "",
+    password: "",
+  });
+
+  const handleValueChange = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const body = {
+      name: values.userName,
+      email: values.email,
+      password: values.password,
+    };
+
+    const errors = await createUser(body);
+    if (errors) {
+      console.log(errors);
+    }
+  };
+
   return (
-    <Box className={classes.hero_box}>
+    <form className={classes.hero_box} onSubmit={handleSubmit}>
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom={true}>
@@ -33,22 +58,29 @@ function SignupForm() {
           </Typography>
           <TextField
             id="user-name"
-            label="User Name"
+            name="userName"
+            label="Full Name"
             fullWidth={true}
             size="small"
             variant="outlined"
             margin="dense"
+            onChange={handleValueChange}
+            value={values.userName}
           />
           <TextField
             id="email"
+            name="email"
             label="Email"
             fullWidth={true}
             size="small"
             variant="outlined"
             margin="dense"
+            onChange={handleValueChange}
+            value={values.email}
           />
           <TextField
             id="password"
+            name="password"
             label="Password"
             type="password"
             fullWidth={true}
@@ -56,12 +88,15 @@ function SignupForm() {
             variant="outlined"
             margin="dense"
             helperText="Your password must be at least 8 characters long"
+            onChange={handleValueChange}
+            value={values.password}
           />
           <Button
             color="primary"
             fullWidth={true}
             size="large"
             variant="contained"
+            type="submit"
             className={classes.form_signup_btn}
           >
             Sign Up
@@ -72,7 +107,7 @@ function SignupForm() {
           </Typography>
         </CardContent>
       </Card>
-    </Box>
+    </form>
   );
 }
 

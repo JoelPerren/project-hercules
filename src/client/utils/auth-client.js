@@ -18,7 +18,7 @@ async function createUser(user) {
   const response = await api("/users", "POST", user);
   if (response.status === 201) {
     return [];
-  } else if (response.status === 400) {
+  } else if (response.status === 422) {
     return response.json().then((data) => {
       return data.errors;
     });
