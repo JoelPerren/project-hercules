@@ -15,7 +15,7 @@ connectDB();
 // Import routes
 const users = require("./routes/users");
 
-// Create the Express app.
+// Create the Express app
 const app = express();
 
 // Setup morgan which gives us HTTP request logging

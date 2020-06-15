@@ -65,7 +65,7 @@ exports.authenticateUser = async (req, res, next) => {
   if (message) {
     console.warn(message);
 
-    // Return a response with a 401 Unauthorized HTTP status code.
+    // Return a response with a 401 Unauthorized HTTP status code
     res.status(401).json({ message: "Access Denied" });
   } else {
     // Or if user authentication succeeded...
@@ -74,12 +74,15 @@ exports.authenticateUser = async (req, res, next) => {
   }
 };
 
-// @desc    Get all users
+// @desc    Get a user
 // @route   GET /api/v1/users
 // @access  Public
 exports.getUsers = async (req, res, next) => {
-  const count = await User.estimatedDocumentCount();
-  res.status(200).send(`${count} users in DB`);
+  const currentUser = req.currentUser;
+  const userName = currentUser.name;
+  const emailAddress = currentUser.email;
+
+  res.status(200).json({ name: userName, email: emailAddress });
 };
 
 // @desc    Create user
@@ -100,9 +103,18 @@ exports.createUser = async (req, res, next) => {
     // Hash the new user's password
     newUser.password = bcryptjs.hashSync(newUser.password);
 
-    // Add the user to the `users` collection in HerculesDB.
-    await new User(newUser).save();
-    res.status(201).send(`New user ${req.body.name} created`).end();
+    // Add the user to the `users` collection in HerculesDB
+    try {
+      await new User(newUser).save();
+      res.status(201).send(`New user ${req.body.name} created`).end();
+    } catch (err) {
+      res.status(422).json({
+        errors: [
+          { message: "duplicate email", param: "email", location: "body" },
+        ],
+      });
+      return;
+    }
   } catch (err) {
     return next(err);
   }

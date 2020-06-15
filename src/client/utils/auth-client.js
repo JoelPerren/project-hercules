@@ -10,7 +10,7 @@ async function getUser(username, password) {
   } else if (response.status === 401) {
     return null;
   } else {
-    throw new Error();
+    // throw new Error();
   }
 }
 
@@ -23,7 +23,7 @@ async function createUser(user) {
       return data.errors;
     });
   } else {
-    throw new Error();
+    // throw new Error();
   }
 }
 
