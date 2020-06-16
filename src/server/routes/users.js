@@ -2,17 +2,22 @@ const express = require("express");
 const router = express.Router();
 const {
   authenticateUser,
-  getUsers,
+  getUser,
   validate,
   createUser,
-  deleteUser,
+  login,
 } = require("../controllers/usersController");
+const passport = require("passport");
 
+router.route("/register").post(validate("createUser"), createUser);
+router.route("/login").get(authenticateUser, getUser).post(login);
 router
-  .route("/")
-  .get(authenticateUser, getUsers)
-  .post(validate("createUser"), createUser);
-
-router.route("/:id").delete(deleteUser);
+  .route("/protected")
+  .get(passport.authenticate("jwt", { session: false }), (req, res, next) => {
+    res.status(200).json({
+      success: true,
+      msg: "You are successfully authenticated to this route!",
+    });
+  });
 
 module.exports = router;
