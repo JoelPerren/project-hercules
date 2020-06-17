@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   makeStyles,
   Card,
@@ -7,7 +7,8 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
-import { createUser } from "../utils/auth-client";
+import { registerUser, loginUser } from "../utils/auth-client";
+import { AuthContext } from "../context/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   hero_box: {
@@ -29,6 +30,7 @@ function SignupForm() {
     email: "",
     password: "",
   });
+  const { setAuthenticatedUser } = useContext(AuthContext);
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
@@ -43,10 +45,18 @@ function SignupForm() {
       password: values.password,
     };
 
-    const errors = await createUser(body);
-    if (errors) {
-      console.log(errors);
+    const registerErrors = await registerUser(body);
+    if (registerErrors) {
+      console.log(registerErrors);
     }
+
+    const loginErrors = await loginUser(body.email, body.password);
+    if (loginErrors) {
+      console.log(loginErrors);
+    }
+
+    console.log("Setting context...");
+    setAuthenticatedUser(true);
   };
 
   return (

@@ -2,58 +2,52 @@ import api from "./api-client";
 var jwtDecode = require("jwt-decode");
 
 async function authenticateUser() {
-  const token = localStorage.token;
+  try {
+    const userToken = localStorage.getItem("userToken");
 
-  if (!token) {
-    // return false;
-    const response = await api("/users/login", "POST", {
-      email: "test@test.com",
-      password: "testpass",
-    });
-
-    if (response.status === 200) {
-      const json = await response.json();
-      localStorage.token = json.token;
-      return true;
-    } else {
+    if (!userToken) {
       return false;
     }
-  }
 
-  const decoded = jwtDecode(token);
-  if (decoded.exp > Date.now()) {
-    localStorage.clear();
+    const expiry = jwtDecode(userToken).exp;
+
+    if (expiry < Date.now()) {
+      localStorage.clear();
+      return false;
+    }
+
+    return true;
+  } catch {
     return false;
   }
-
-  return true;
 }
 
-async function getUser(username, password) {
-  const response = await api(`/users`, "GET", null, true, {
-    username,
-    password,
+async function loginUser(username, password) {
+  const response = await api(`/users/login`, "POST", {
+    email: username,
+    password: password,
   });
   if (response.status === 200) {
-    return response.json().then((data) => data);
+    const json = await response.json();
+    console.log(json);
+    localStorage.setItem("userToken", json.token);
+    return json;
   } else if (response.status === 401) {
     return null;
   } else {
-    // throw new Error();
+    return null;
   }
 }
 
-async function createUser(user) {
-  const response = await api("/users", "POST", user);
+async function registerUser(user) {
+  const response = await api("/users/register", "POST", user);
   if (response.status === 201) {
     return [];
   } else if (response.status === 422) {
     return response.json().then((data) => {
       return data.errors;
     });
-  } else {
-    // throw new Error();
   }
 }
 
-export { authenticateUser, getUser, createUser };
+export { authenticateUser, loginUser, registerUser };

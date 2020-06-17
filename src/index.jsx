@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { GlobalProvider } from "./client/context/GlobalProvider";
+import { AuthProvider } from "./client/context/AuthProvider";
 import App from "./client/App";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Cssbaseline from "@material-ui/core/CssBaseline";
@@ -8,12 +8,12 @@ import theme from "./client/theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <GlobalProvider>
-      <ThemeProvider theme={theme}>
-        <Cssbaseline />
+    <ThemeProvider theme={theme}>
+      <Cssbaseline />
+      <AuthProvider>
         <App />
-      </ThemeProvider>
-    </GlobalProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

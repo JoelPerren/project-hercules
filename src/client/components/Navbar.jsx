@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   AppBar,
   Typography,
@@ -43,10 +44,17 @@ function Navbar() {
           variant="outlined"
           color="primary"
           className={classes.login_button}
+          component={Link}
+          to="/login"
         >
           Log In
         </Button>
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/register"
+        >
           Sign Up
         </Button>
       </Toolbar>

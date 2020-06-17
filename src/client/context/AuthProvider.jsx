@@ -2,9 +2,9 @@ import React, { createContext, useState, useEffect } from "react";
 import { authenticateUser } from "../utils/auth-client";
 import FullPageSpinner from "../pages/FullPageSpinner";
 
-export const GlobalContext = createContext();
+export const AuthContext = createContext();
 
-export const GlobalProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [data, setData] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -22,12 +22,13 @@ export const GlobalProvider = ({ children }) => {
   }
 
   return (
-    <GlobalContext.Provider
+    <AuthContext.Provider
       value={{
         authenticatedUser: data,
+        setAuthenticatedUser: setData,
       }}
     >
       {children}
-    </GlobalContext.Provider>
+    </AuthContext.Provider>
   );
 };
