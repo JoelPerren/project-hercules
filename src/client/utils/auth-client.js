@@ -1,4 +1,33 @@
 import api from "./api-client";
+var jwtDecode = require("jwt-decode");
+
+async function authenticateUser() {
+  const token = localStorage.token;
+
+  if (!token) {
+    // return false;
+    const response = await api("/users/login", "POST", {
+      email: "test@test.com",
+      password: "testpass",
+    });
+
+    if (response.status === 200) {
+      const json = await response.json();
+      localStorage.token = json.token;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  const decoded = jwtDecode(token);
+  if (decoded.exp > Date.now()) {
+    localStorage.clear();
+    return false;
+  }
+
+  return true;
+}
 
 async function getUser(username, password) {
   const response = await api(`/users`, "GET", null, true, {
@@ -27,4 +56,4 @@ async function createUser(user) {
   }
 }
 
-export { getUser, createUser };
+export { authenticateUser, getUser, createUser };

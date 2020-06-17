@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { GlobalProvider } from "./client/data/GlobalProvider";
+import { GlobalProvider } from "./client/context/GlobalProvider";
 import App from "./client/App";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Cssbaseline from "@material-ui/core/CssBaseline";

@@ -1,21 +1,14 @@
 import React, { useContext } from "react";
-import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
-import Footer from "./components/Footer";
+import AuthenticatedApp from "./pages/AuthenticatedApp";
 // import { createUser, getUser } from "./utils/auth-client";
 
-// import { GlobalContext } from "./data/GlobalProvider";
+import { GlobalContext } from "./context/GlobalProvider";
 
 const App = () => {
-  // const context = useContext(GlobalContext);
+  const context = useContext(GlobalContext);
 
-  return (
-    <>
-      <Navbar />
-      <LandingPage />
-      <Footer />
-    </>
-  );
+  return context.authenticatedUser ? <AuthenticatedApp /> : <LandingPage />;
 };
 
 export default App;
