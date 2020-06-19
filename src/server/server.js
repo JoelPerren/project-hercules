@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const passport = require("passport");
 const app = express();
@@ -14,6 +15,7 @@ connectDB();
 app.use(express.json());
 app.use(cors({ credentials: true }));
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 require("./models/User");
 require("./config/passport")(passport);
