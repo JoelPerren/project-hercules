@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AppBar,
+  Container,
   Typography,
   IconButton,
   makeStyles,
@@ -12,6 +13,10 @@ import { ReactComponent as LogoSvg } from "../svg/dark-logo.svg";
 const useStyles = makeStyles((theme) => ({
   appbar: {
     background: theme.palette.background.paper,
+  },
+  container: {
+    display: "flex",
+    alignItems: "center",
   },
   logo: {
     fontSize: 44,
@@ -30,17 +35,19 @@ function Footer() {
   return (
     <AppBar position="static">
       <Toolbar className={classes.appbar}>
-        <IconButton edge="start">
-          <SvgIcon viewBox="0 0 44 44" className={classes.logo}>
-            <LogoSvg />
-          </SvgIcon>
-        </IconButton>
-        <Typography variant="h1" className={classes.title}>
-          Hercules
-        </Typography>
-        <Typography variant="caption" color="textSecondary">
-          (c) Joel Perren · {new Date().getFullYear()}
-        </Typography>
+        <Container className={classes.container}>
+          <IconButton edge="start">
+            <SvgIcon viewBox="0 0 44 44" className={classes.logo}>
+              <LogoSvg />
+            </SvgIcon>
+          </IconButton>
+          <Typography variant="h1" className={classes.title}>
+            Hercules
+          </Typography>
+          <Typography variant="caption" color="textSecondary">
+            (c) Joel Perren · {new Date().getFullYear()}
+          </Typography>
+        </Container>
       </Toolbar>
     </AppBar>
   );

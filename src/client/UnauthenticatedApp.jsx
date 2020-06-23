@@ -10,16 +10,16 @@ function UnauthenticatedApp() {
     <Router>
       <Switch>
         <Route path="/register">
-          <RegisterPage />;
+          <RegisterPage />
         </Route>
         <Route path="/login">
-          <LoginPage />;
+          <LoginPage />
         </Route>
         <Route exact path="/">
-          <LandingPage />;
+          <LandingPage />
         </Route>
         <Route path="*">
-          <PageNotFound />;
+          <PageNotFound />
         </Route>
       </Switch>
     </Router>

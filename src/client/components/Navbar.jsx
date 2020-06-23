@@ -8,12 +8,17 @@ import {
   makeStyles,
   Toolbar,
   SvgIcon,
+  Container,
 } from "@material-ui/core";
 import { ReactComponent as LogoSvg } from "../svg/dark-logo.svg";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
     background: theme.palette.background.paper,
+  },
+  container: {
+    display: "flex",
+    alignItems: "center",
   },
   logo: {
     fontSize: 44,
@@ -31,32 +36,34 @@ function Navbar() {
 
   return (
     <AppBar position="static">
-      <Toolbar className={classes.appbar}>
-        <IconButton edge="start">
-          <SvgIcon viewBox="0 0 44 44" className={classes.logo}>
-            <LogoSvg />
-          </SvgIcon>
-        </IconButton>
-        <Typography variant="h1" className={classes.title}>
-          Hercules
-        </Typography>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.login_button}
-          component={Link}
-          to="/login"
-        >
-          Log In
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          component={Link}
-          to="/register"
-        >
-          Sign Up
-        </Button>
+      <Toolbar disableGutters={true} className={classes.appbar}>
+        <Container className={classes.container}>
+          <IconButton edge="start">
+            <SvgIcon viewBox="0 0 44 44" className={classes.logo}>
+              <LogoSvg />
+            </SvgIcon>
+          </IconButton>
+          <Typography variant="h1" className={classes.title}>
+            Hercules
+          </Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.login_button}
+            component={Link}
+            to="/login"
+          >
+            Log In
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/register"
+          >
+            Sign Up
+          </Button>
+        </Container>
       </Toolbar>
     </AppBar>
   );
