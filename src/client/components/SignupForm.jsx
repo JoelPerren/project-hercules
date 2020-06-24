@@ -12,10 +12,7 @@ import { AuthContext } from "../context/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   hero_box: {
-    width: "80%",
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-    },
+    maxWidth: "450px",
   },
   form_signup_btn: {
     marginTop: 10,
