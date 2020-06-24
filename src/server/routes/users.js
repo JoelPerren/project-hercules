@@ -4,13 +4,13 @@ const {
   validate,
   createUser,
   login,
-  refreshToken,
+  authenticateWithToken,
 } = require("../controllers/usersController");
 const passport = require("passport");
 
 router.route("/register").post(validate("createUser"), createUser);
 router.route("/login").post(validate("login"), login);
-router.route("/refresh_token").post(validate("refreshToken"), refreshToken);
+router.route("/authenticate").post(authenticateWithToken);
 router
   .route("/protected")
   .get(passport.authenticate("jwt", { session: false }), (req, res) => {

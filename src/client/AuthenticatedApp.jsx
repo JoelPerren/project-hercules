@@ -1,7 +1,7 @@
 import React from "react";
 
 function AuthenticatedApp() {
-  return <div></div>;
+  return <div>AUTHENTICATED</div>;
 }
 
 export default AuthenticatedApp;

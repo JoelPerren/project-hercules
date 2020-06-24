@@ -2,7 +2,8 @@ const User = require("../models/User");
 const bcryptjs = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const tokens = require("../lib/tokens");
-const passport = require("passport");
+const utils = require("../lib/utils");
+const Token = require("../models/Token");
 
 exports.validate = (func) => {
   // https://www.freecodecamp.org/news/how-to-make-input-validation-simple-and-clean-in-your-express-js-app-ea9b5ff5a8a7/
@@ -20,12 +21,6 @@ exports.validate = (func) => {
         body("password", "password doesn't exist").exists(),
       ];
     }
-    case "refreshToken": {
-      return [
-        body("email", "email doesn't exist").exists().isEmail(),
-        body("refreshToken", "refresh token doesn't exist").exists(),
-      ];
-    }
   }
 };
 
@@ -37,7 +32,6 @@ exports.createUser = async (req, res, next) => {
 
     const newUser = req.body;
     newUser.password = bcryptjs.hashSync(newUser.password);
-    newUser.refresh_token = tokens.issueRefToken();
 
     try {
       await new User(newUser).save();
@@ -61,50 +55,76 @@ exports.login = async (req, res, next) => {
       res.status(401).json({ success: false, msg: "invalid details" });
     }
 
+    const userId = user.get("_id");
+
     const authenticated = bcryptjs.compareSync(password, user.get("password"));
 
     if (!authenticated) {
       res.status(401).json({ success: false, msg: "invalid details" });
     }
 
-    const tokenObject = tokens.issueJWT(user);
-    const refreshToken = user.get("refresh_token");
-    const date = new Date();
-    res
-      .status(200)
-      .cookie("refresh_token", refreshToken, {
-        httpOnly: true,
-        // TODO(Joel): For prod, turn this on and make sure it doesn't break anything!
-        // secure: true,
-        expires: new Date(date.setMonth(date.getMonth() + 3)),
-      })
-      .json({
-        success: true,
-        token: tokenObject.token,
-        expiresIn: tokenObject.expires,
-      });
+    const accessToken = tokens.issueJWT(user);
+    const refreshToken = {
+      refreshToken: tokens.issueRefToken(),
+      user: userId,
+    };
+
+    try {
+      const refreshTokenDocument = await new Token(refreshToken).save();
+      res
+        .status(200)
+        .cookie("refresh_token", refreshToken.refreshToken, {
+          // TODO(Joel): For prod, turn this on and make sure it doesn't break anything!
+          // secure: true,
+          expires: refreshTokenDocument.get("expiresAt"),
+        })
+        .json({
+          success: true,
+          access_token: accessToken.token,
+          expiresIn: accessToken.expires,
+        });
+    } catch {
+      next(err);
+    }
   } catch (err) {
     next(err);
   }
 };
 
-exports.refreshToken = async (req, res, next) => {
+exports.authenticateWithToken = async (req, res, next) => {
   try {
-    const emailAddress = req.body.email;
-    const refreshToken = req.cookies.refresh_token;
+    const oldRefreshToken = req.cookies.refresh_token;
 
-    let user = await User.findOne({ email: emailAddress });
+    // TODO(Joel): Is this the most efficient pattern? Perhaps a lookup aggregation would be better.
+    let newRefreshToken = await Token.findOneAndUpdate(
+      { refreshToken: oldRefreshToken },
+      {
+        refreshToken: tokens.issueRefToken(),
+        expiresAt: utils.nMonthsFromNow(1),
+      },
+      { new: true }
+    ).exec();
+    let user = await User.findById(newRefreshToken.get("user"));
 
-    if (!user || !refreshToken || user.get("refresh_token") !== refreshToken) {
+    if (!newRefreshToken || !user) {
       res.status(401).json({ success: false, msg: "invalid details" });
     }
 
-    const tokenObject = tokens.issueJWT(user);
-    res.status(200).json({
-      success: true,
-      token: tokenObject.token,
-      expiresIn: tokenObject.expires,
-    });
+    const accessToken = tokens.issueJWT(user);
+    res
+      .status(200)
+      .cookie("refresh_token", newRefreshToken.refreshToken, {
+        // TODO(Joel): For prod, turn this on and make sure it doesn't break anything!
+        // secure: true,
+        expires: newRefreshToken.get("expiresAt"),
+      })
+      .json({
+        success: true,
+        userName: user.get("name"),
+        email: user.get("email"),
+        accessToken: accessToken.token,
+        expiresIn: accessToken.expires,
+      });
   } catch (err) {
     next(err);
   }

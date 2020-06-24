@@ -1,20 +1,35 @@
 import React, { createContext, useState, useEffect } from "react";
-import { authenticateUser } from "../utils/auth-client";
+import { loadUserData } from "../utils/auth-client";
 import FullPageSpinner from "../pages/FullPageSpinner";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [data, setData] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await authenticateUser();
-      setData(response);
+    async function authenticateUser() {
+      const refreshToken = Cookies.get("refresh_token");
+      if (!refreshToken) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await loadUserData(refreshToken);
+
+      if (Object.keys(response).length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      setUserData(response);
+      setVerified(true);
       setLoading(false);
     }
-    fetchData();
+    authenticateUser();
   }, []);
 
   if (loading) {
@@ -24,8 +39,10 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        authenticatedUser: data,
-        setAuthenticatedUser: setData,
+        verified: verified,
+        userData: userData,
+        setVerified: setVerified,
+        setUserData: setUserData,
       }}
     >
       {children}

@@ -11,6 +11,7 @@ function api(
 
   const options = {
     method,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
