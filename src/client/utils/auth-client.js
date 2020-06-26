@@ -2,6 +2,38 @@ import api from "./api-client";
 import Cookies from "js-cookie";
 var jwtDecode = require("jwt-decode");
 
+async function authenticateUser(userDetails) {
+  userDetails.isAuthenticated = false;
+
+  if (userDetails.accessToken) {
+    userDetails = await authenticateByAccessToken(userDetails);
+  }
+
+  if (!userDetails.isAuthenticated && userDetails.refreshToken) {
+    userDetails = await authenticateByRefreshToken(userDetails);
+  }
+
+  if (!userDetails.isAuthenticated) {
+    userDetails = {
+      isAuthenticated: false,
+      email: "",
+      name: "",
+      accessToken: null,
+      refreshToken: null,
+    };
+  }
+
+  return userDetails;
+}
+
+async function authenticateByAccessToken(userDetails) {
+  return userDetails;
+}
+
+async function authenticateByRefreshToken(userDetails) {
+  return userDetails;
+}
+
 async function verifyAccessToken(token) {
   // const expiry = jwtDecode(userToken).exp;
 

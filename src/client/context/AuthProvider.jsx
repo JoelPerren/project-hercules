@@ -6,8 +6,13 @@ import Cookies from "js-cookie";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [verified, setVerified] = useState(false);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({
+    isAuthenticated: false,
+    email: "",
+    name: "",
+    accessToken: localStorage.getItem("accessToken"),
+    refreshToken: Cookies.get("refreshToken"),
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +31,6 @@ export const AuthProvider = ({ children }) => {
       }
 
       setUserData(response);
-      setVerified(true);
       setLoading(false);
     }
     authenticateUser();
@@ -39,9 +43,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        verified: verified,
         userData: userData,
-        setVerified: setVerified,
         setUserData: setUserData,
       }}
     >

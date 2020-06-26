@@ -1,23 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const {
-  validate,
   createUser,
   login,
-  authenticateWithToken,
+  authenticateWithAccessToken,
+  authenticateWithRefreshToken,
+  returnUserDetails,
 } = require("../controllers/usersController");
 const passport = require("passport");
 
-router.route("/register").post(validate("createUser"), createUser);
-router.route("/login").post(validate("login"), login);
-router.route("/authenticate").post(authenticateWithToken);
+router.route("/register").post(createUser, returnUserDetails);
+router.route("/login").get(login, returnUserDetails);
 router
-  .route("/protected")
-  .get(passport.authenticate("jwt", { session: false }), (req, res) => {
-    res.status(200).json({
-      success: true,
-      msg: "You are successfully authenticated to this route!",
-    });
-  });
+  .route("/authenticate-with-access-token")
+  .get(
+    passport.authenticate("jwt", { session: false }),
+    authenticateWithAccessToken
+  );
+router
+  .route("/authenticate-with-refresh-token")
+  .get(authenticateWithRefreshToken, returnUserDetails);
 
 module.exports = router;

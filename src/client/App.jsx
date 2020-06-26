@@ -4,9 +4,9 @@ import UnauthenticatedApp from "./UnauthenticatedApp";
 import { AuthContext } from "./context/AuthProvider";
 
 const App = () => {
-  const { verified } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
 
-  return verified ? <AuthenticatedApp /> : <UnauthenticatedApp />;
+  return userData.authenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />;
 };
 
 export default App;

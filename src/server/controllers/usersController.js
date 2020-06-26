@@ -1,9 +1,22 @@
 const User = require("../models/User");
 const bcryptjs = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const tokens = require("../lib/tokens");
 const utils = require("../lib/utils");
 const Token = require("../models/Token");
+
+async function createNewRefreshToken(userId) {
+  try {
+    const refreshToken = {
+      refreshToken: tokens.issueRefToken(),
+      user: userId,
+    };
+    return await new Token(refreshToken).save();
+  } catch (err) {
+    return null;
+  }
+}
 
 exports.validate = (func) => {
   // https://www.freecodecamp.org/news/how-to-make-input-validation-simple-and-clean-in-your-express-js-app-ea9b5ff5a8a7/
@@ -24,18 +37,32 @@ exports.validate = (func) => {
   }
 };
 
+/*
+POST Request
+req = {
+  name: user's display name,
+  email: user's email (unique),
+  password: plain text password
+}
+*/
 exports.createUser = async (req, res, next) => {
   try {
-    if (!validationResult(req).isEmpty()) {
-      res.status(422).json({ errors: errors.array() });
-    }
-
-    const newUser = req.body;
-    newUser.password = bcryptjs.hashSync(newUser.password);
+    const reqBody = req.body;
+    reqBody.password = bcryptjs.hashSync(reqBody.password);
 
     try {
-      await new User(newUser).save();
-      res.status(201).json({ success: true, msg: "user created" });
+      let newUser = new User(reqBody);
+      await newUser.save();
+
+      const refreshToken = await createNewRefreshToken(newUser._id);
+
+      res.userDetails = {
+        user: newUser,
+        refreshToken: refreshToken,
+        accessToken: tokens.issueJWT(newUser),
+      };
+
+      next();
     } catch {
       res.status(422).json({ success: false, msg: "duplicate email" });
     }
@@ -44,6 +71,13 @@ exports.createUser = async (req, res, next) => {
   }
 };
 
+/*
+POST request
+req = {
+  email: user email,
+  password: plaintext password
+}
+*/
 exports.login = async (req, res, next) => {
   try {
     const emailAddress = req.body.email;
@@ -55,45 +89,55 @@ exports.login = async (req, res, next) => {
       res.status(401).json({ success: false, msg: "invalid details" });
     }
 
-    const userId = user.get("_id");
-
-    const authenticated = bcryptjs.compareSync(password, user.get("password"));
+    const authenticated = bcryptjs.compareSync(password, user.password);
 
     if (!authenticated) {
       res.status(401).json({ success: false, msg: "invalid details" });
     }
 
-    const accessToken = tokens.issueJWT(user);
-    const refreshToken = {
-      refreshToken: tokens.issueRefToken(),
-      user: userId,
+    const refreshToken = await createNewRefreshToken(user._id);
+
+    res.userDetails = {
+      user: user,
+      refreshToken: refreshToken,
+      accessToken: tokens.issueJWT(user),
     };
 
-    try {
-      const refreshTokenDocument = await new Token(refreshToken).save();
-      res
-        .status(200)
-        .cookie("refresh_token", refreshToken.refreshToken, {
-          // TODO(Joel): For prod, turn this on and make sure it doesn't break anything!
-          // secure: true,
-          expires: refreshTokenDocument.get("expiresAt"),
-        })
-        .json({
-          success: true,
-          access_token: accessToken.token,
-          expiresIn: accessToken.expires,
-        });
-    } catch {
-      next(err);
-    }
+    next();
   } catch (err) {
     next(err);
   }
 };
 
-exports.authenticateWithToken = async (req, res, next) => {
+/*
+GET request
+JWT in auth header
+*/
+exports.authenticateWithAccessToken = async (req, res, next) => {
   try {
-    const oldRefreshToken = req.cookies.refresh_token;
+    const decodedToken = jwt.decode(req.headers.authorization.slice(7));
+    const user = await User.findById(decodedToken.sub);
+
+    res.status(200).json({
+      success: true,
+      userName: user.name,
+      email: user.email,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/*
+POST request
+req = {
+  email: user's email
+}
+cookies = refreshToken
+*/
+exports.authenticateWithRefreshToken = async (req, res, next) => {
+  try {
+    const oldRefreshToken = req.cookies.refreshToken;
 
     // TODO(Joel): Is this the most efficient pattern? Perhaps a lookup aggregation would be better.
     let newRefreshToken = await Token.findOneAndUpdate(
@@ -104,24 +148,45 @@ exports.authenticateWithToken = async (req, res, next) => {
       },
       { new: true }
     ).exec();
-    let user = await User.findById(newRefreshToken.get("user"));
+    let user = await User.findById(newRefreshToken.user);
 
     if (!newRefreshToken || !user) {
       res.status(401).json({ success: false, msg: "invalid details" });
     }
 
-    const accessToken = tokens.issueJWT(user);
+    res.userDetails = {
+      user: user,
+      refreshToken: newRefreshToken,
+      accessToken: tokens.issueJWT(user),
+    };
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.returnUserDetails = async (req, res, next) => {
+  try {
+    if (Object.keys(res.userDetails).length === 0) {
+      res
+        .status(401)
+        .json({ success: false, msg: "could not retrieve details" });
+    }
+
+    const { user, refreshToken, accessToken } = res.userDetails;
+
     res
       .status(200)
-      .cookie("refresh_token", newRefreshToken.refreshToken, {
+      .cookie("refreshToken", refreshToken.refreshToken, {
         // TODO(Joel): For prod, turn this on and make sure it doesn't break anything!
         // secure: true,
-        expires: newRefreshToken.get("expiresAt"),
+        expires: refreshToken.expiresAt,
       })
       .json({
         success: true,
-        userName: user.get("name"),
-        email: user.get("email"),
+        userName: user.name,
+        email: user.email,
         accessToken: accessToken.token,
         expiresIn: accessToken.expires,
       });
