@@ -8,11 +8,11 @@ const PRIV_KEY = fs.readFileSync(pathToKey, "utf8");
 
 const issueJWT = (user) => {
   const _id = user._id;
-  const expiresIn = 900; // 15 minutes ('15m' was not working)
+  const expiresIn = 900; // 15 minutes in seconds
 
   const payload = {
     sub: _id,
-    iat: Date.now(),
+    iat: Math.floor(Date.now() / 1000),
   };
 
   const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {

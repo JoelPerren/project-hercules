@@ -1,16 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
+// TODO(Joel):
+// This component needs a tidy up.
+// Things like the user icon and menu should be moved to bespoke components.
+// Also make so the menu appears below the user icon, rather than on top!
+// But it works for now, so on we go!
+
+import React, { useState, useContext } from "react";
+import { Link, useHistory } from "react-router-dom";
 import {
   AppBar,
   Typography,
   Button,
-  IconButton,
   makeStyles,
   Toolbar,
-  SvgIcon,
   Container,
+  Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import { ReactComponent as LogoSvg } from "../svg/dark-logo.svg";
+import { AuthContext } from "../context/AuthProvider";
+import { logout } from "../utils/auth-client";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -21,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   logo: {
-    fontSize: 44,
+    marginRight: theme.spacing(1),
   },
   title: {
     flexGrow: 1,
@@ -29,40 +39,75 @@ const useStyles = makeStyles((theme) => ({
   login_button: {
     marginRight: theme.spacing(2),
   },
+  icon_button: {
+    backgroundColor: theme.palette.primary.main,
+  },
 }));
 
 function Navbar() {
+  const { userData, setUserData } = useContext(AuthContext);
   const classes = useStyles();
+  const history = useHistory();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const logoutUser = () => {
+    setUserData(logout());
+    history.push("/");
+  };
 
   return (
     <AppBar position="static">
       <Toolbar disableGutters={true} className={classes.appbar}>
         <Container className={classes.container}>
-          <IconButton edge="start">
-            <SvgIcon viewBox="0 0 44 44" className={classes.logo}>
-              <LogoSvg />
-            </SvgIcon>
-          </IconButton>
+          <LogoSvg className={classes.logo} />
           <Typography variant="h1" className={classes.title}>
             Hercules
           </Typography>
-          <Button
-            variant="outlined"
-            color="primary"
-            className={classes.login_button}
-            component={Link}
-            to="/login"
-          >
-            Log In
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            component={Link}
-            to="/register"
-          >
-            Sign Up
-          </Button>
+          {userData.isAuthenticated ? (
+            <>
+              <IconButton edge="end" size="small" onClick={handleClick}>
+                <Avatar className={classes.icon_button}>U</Avatar>
+              </IconButton>
+              <Menu
+                id="user-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={logoutUser}>Logout</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="outlined"
+                color="primary"
+                className={classes.login_button}
+                component={Link}
+                to="/login"
+              >
+                Log In
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                component={Link}
+                to="/register"
+              >
+                Sign Up
+              </Button>
+            </>
+          )}
         </Container>
       </Toolbar>
     </AppBar>

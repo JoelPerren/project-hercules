@@ -6,6 +6,7 @@ const User = require("mongoose").model("User");
 
 const pathToKey = path.join(__dirname, "id_rsa_pub.pem");
 const PUB_KEY = fs.readFileSync(pathToKey, "utf8");
+console.log(pathToKey);
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

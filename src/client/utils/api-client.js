@@ -22,10 +22,7 @@ function api(
   }
 
   if (requiresAuth) {
-    const encodedCredentials = btoa(
-      `${credentials.username}:${credentials.password}`
-    );
-    options.headers["Authorization"] = `Basic ${encodedCredentials}`;
+    options.headers["Authorization"] = credentials;
   }
   return fetch(url, options);
 }

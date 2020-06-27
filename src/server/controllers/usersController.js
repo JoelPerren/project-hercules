@@ -18,25 +18,6 @@ async function createNewRefreshToken(userId) {
   }
 }
 
-exports.validate = (func) => {
-  // https://www.freecodecamp.org/news/how-to-make-input-validation-simple-and-clean-in-your-express-js-app-ea9b5ff5a8a7/
-  switch (func) {
-    case "createUser": {
-      return [
-        body("name", "name doesn't exist").exists(),
-        body("email", "email doesn't exist").exists().isEmail(),
-        body("password", "password doesn't exist").exists(),
-      ];
-    }
-    case "login": {
-      return [
-        body("email", "email doesn't exist").exists().isEmail(),
-        body("password", "password doesn't exist").exists(),
-      ];
-    }
-  }
-};
-
 /*
 POST Request
 req = {
@@ -113,14 +94,14 @@ exports.login = async (req, res, next) => {
 GET request
 JWT in auth header
 */
+
 exports.authenticateWithAccessToken = async (req, res, next) => {
   try {
-    const decodedToken = jwt.decode(req.headers.authorization.slice(7));
-    const user = await User.findById(decodedToken.sub);
+    const user = req.user;
 
     res.status(200).json({
       success: true,
-      userName: user.name,
+      name: user.name,
       email: user.email,
     });
   } catch (err) {
@@ -180,12 +161,12 @@ exports.returnUserDetails = async (req, res, next) => {
       .status(200)
       .cookie("refreshToken", refreshToken.refreshToken, {
         // TODO(Joel): For prod, turn this on and make sure it doesn't break anything!
-        // secure: true,
+        secure: true,
         expires: refreshToken.expiresAt,
       })
       .json({
         success: true,
-        userName: user.name,
+        name: user.name,
         email: user.email,
         accessToken: accessToken.token,
         expiresIn: accessToken.expires,

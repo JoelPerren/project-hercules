@@ -6,7 +6,11 @@ import { AuthContext } from "./context/AuthProvider";
 const App = () => {
   const { userData } = useContext(AuthContext);
 
-  return userData.authenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />;
+  return userData.isAuthenticated ? (
+    <AuthenticatedApp />
+  ) : (
+    <UnauthenticatedApp />
+  );
 };
 
 export default App;

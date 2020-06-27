@@ -7,8 +7,10 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
-import { registerUser, loginUser } from "../utils/auth-client";
 import { AuthContext } from "../context/AuthProvider";
+import api from "../utils/api-client";
+import { useHistory } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   hero_box: {
@@ -27,7 +29,8 @@ function SignupForm() {
     email: "",
     password: "",
   });
-  const { setAuthenticatedUser } = useContext(AuthContext);
+  const { setUserData } = useContext(AuthContext);
+  const history = useHistory();
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
@@ -42,18 +45,22 @@ function SignupForm() {
       password: values.password,
     };
 
-    const registerErrors = await registerUser(body);
-    if (registerErrors) {
-      console.log(registerErrors);
+    const response = await api("/users/register", "POST", body);
+
+    if (response.status !== 200) {
+      return;
     }
 
-    const loginErrors = await loginUser(body.email, body.password);
-    if (loginErrors) {
-      console.log(loginErrors);
-    }
+    const jsonResponse = await response.json();
+    setUserData({
+      isAuthenticated: true,
+      email: jsonResponse.email,
+      name: jsonResponse.name,
+      accessToken: jsonResponse.accessToken,
+      refreshToken: Cookies.get("refreshToken"),
+    });
 
-    console.log("Setting context...");
-    setAuthenticatedUser(true);
+    history.goBack();
   };
 
   return (

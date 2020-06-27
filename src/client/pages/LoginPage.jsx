@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthProvider";
 import {
   makeStyles,
   Card,
@@ -8,6 +9,9 @@ import {
   Button,
   Container,
 } from "@material-ui/core";
+import api from "../utils/api-client";
+import { useHistory } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,6 +34,8 @@ function LoginPage() {
     email: "",
     password: "",
   });
+  const { setUserData } = useContext(AuthContext);
+  const history = useHistory();
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
@@ -43,8 +49,22 @@ function LoginPage() {
       password: values.password,
     };
 
-    console.log("Login pressed!");
-    // TODO(Joel): Handle workflow to log user in and set global context
+    const response = await api("/users/login", "POST", body);
+
+    if (response.status !== 200) {
+      return;
+    }
+
+    const jsonResponse = await response.json();
+    setUserData({
+      isAuthenticated: true,
+      email: jsonResponse.email,
+      name: jsonResponse.name,
+      accessToken: jsonResponse.accessToken,
+      refreshToken: Cookies.get("refreshToken"),
+    });
+
+    history.goBack();
   };
 
   return (

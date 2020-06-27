@@ -10,7 +10,7 @@ const {
 const passport = require("passport");
 
 router.route("/register").post(createUser, returnUserDetails);
-router.route("/login").get(login, returnUserDetails);
+router.route("/login").post(login, returnUserDetails);
 router
   .route("/authenticate-with-access-token")
   .get(

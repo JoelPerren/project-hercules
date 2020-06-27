@@ -1,6 +1,5 @@
 import api from "./api-client";
 import Cookies from "js-cookie";
-var jwtDecode = require("jwt-decode");
 
 async function authenticateUser(userDetails) {
   userDetails.isAuthenticated = false;
@@ -27,92 +26,75 @@ async function authenticateUser(userDetails) {
 }
 
 async function authenticateByAccessToken(userDetails) {
-  return userDetails;
-}
+  const accessToken = userDetails.accessToken;
+  let modifiedDetails;
 
-async function authenticateByRefreshToken(userDetails) {
-  return userDetails;
-}
-
-async function verifyAccessToken(token) {
-  // const expiry = jwtDecode(userToken).exp;
-
-  //   if (expiry < Date.now()) {
-  //     localStorage.clear();
-  //     return false;
-  //   }
-  return true;
-}
-
-async function issueAccessToken() {
-  // try {
-  //   const response = await api("/users/refresh_token", "POST");
-  //   if (response.status === 200) {
-  //     const jsonResponse = await response.json();
-  //     return jsonResponse.token;
-  //   } else {
-  //     throw new Error("Couldn't issue JWT");
-  //   }
-  // } catch (err) {
-  //   throw err;
-  // }
-}
-
-function startRefreshTimer() {
-  // setInterval(issueAccessToken(), 840000); // 14 minutes
-}
-
-async function getUserFromRefreshToken() {}
-
-async function loadUserData(refreshToken) {
-  let userData = {};
   try {
-    const response = await api("/users/authenticate", "POST");
+    const response = await api(
+      "/users/authenticate-with-access-token",
+      "GET",
+      null,
+      true,
+      accessToken
+    );
 
     if (response.status !== 200) {
-      Cookies.remove("refresh_token");
-      return userData;
+      return userDetails;
     }
 
     const jsonResponse = await response.json();
 
-    userData = {
-      userName: jsonResponse.userName,
+    modifiedDetails = {
+      ...userDetails,
+      isAuthenticated: true,
       email: jsonResponse.email,
-      accessToken: jsonResponse.accessToken,
+      name: jsonResponse.name,
     };
 
-    startRefreshTimer();
-    return userData;
-  } catch (err) {
-    return userData;
-  }
-}
-
-async function loginUser(username, password) {
-  try {
-    const response = await api(`/users/login`, "POST", {
-      email: username,
-      password: password,
-    });
-    if (response.status === 200) {
-      const jsonResponse = await response.json();
-      return true;
-    } else {
-      return false;
-    }
+    return modifiedDetails;
   } catch {
-    return false;
+    return userDetails;
   }
 }
 
-async function registerUser(user) {
-  const response = await api("/users/register", "POST", user);
-  if (response.status === 201) {
-    return true;
-  } else {
-    return false;
+async function authenticateByRefreshToken(userDetails) {
+  let modifiedDetails;
+
+  try {
+    const response = await api("/users/authenticate-with-refresh-token", "GET");
+
+    if (response.status !== 200) {
+      return userDetails;
+    }
+
+    const jsonResponse = await response.json();
+
+    modifiedDetails = {
+      ...userDetails,
+      isAuthenticated: true,
+      email: jsonResponse.email,
+      name: jsonResponse.name,
+      accessToken: jsonResponse.accessToken,
+      refreshToken: Cookies.get("refreshToken"),
+    };
+
+    return modifiedDetails;
+  } catch {
+    return userDetails;
   }
 }
 
-export { loadUserData, loginUser, registerUser };
+function logout() {
+  const userDetails = {
+    isAuthenticated: false,
+    email: "",
+    name: "",
+    accessToken: null,
+    refreshToken: null,
+  };
+
+  Cookies.remove("refreshToken");
+  return userDetails;
+}
+
+export { authenticateUser, logout };

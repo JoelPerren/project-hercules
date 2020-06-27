@@ -1,7 +1,21 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import PageNotFound from "./pages/PageNotFound";
 
 function AuthenticatedApp() {
-  return <div>AUTHENTICATED</div>;
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Dashboard />
+        </Route>
+        <Route path="*">
+          <PageNotFound />
+        </Route>
+      </Switch>
+    </Router>
+  );
 }
 
 export default AuthenticatedApp;
