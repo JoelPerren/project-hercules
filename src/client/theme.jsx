@@ -32,6 +32,16 @@ let theme = createMuiTheme({
     },
   },
 });
+
+theme.overrides = {
+  MuiListItem: {
+    root: {
+      "&$selected": {
+        backgroundColor: theme.palette.secondary.main,
+      },
+    },
+  },
+};
 theme = responsiveFontSizes(theme);
 
 export default theme;

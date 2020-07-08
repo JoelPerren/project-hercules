@@ -7,6 +7,7 @@ function AuthenticatedApp() {
   return (
     <Router>
       <Switch>
+        <Route path="/test">TEST</Route>
         <Route exact path="/">
           <Dashboard />
         </Route>
