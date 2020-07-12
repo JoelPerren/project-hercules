@@ -30,6 +30,10 @@ let theme = createMuiTheme({
       fontFamily: "'Roboto Condensed', sans-serif",
       fontWeight: 700,
     },
+    h4: {
+      fontFamily: "'Roboto Condensed', sans-serif",
+      fontWeight: 700,
+    },
   },
 });
 

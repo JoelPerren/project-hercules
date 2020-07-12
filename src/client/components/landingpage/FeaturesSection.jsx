@@ -10,7 +10,7 @@ import FeatureCard from "./FeatureCard";
 import UpdateIcon from "@material-ui/icons/Update";
 import BuildIcon from "@material-ui/icons/Build";
 import TrackChangesIcon from "@material-ui/icons/TrackChanges";
-import backgroundImg from "../images/unsplash-dumbell_rack.jpg";
+import backgroundImg from "../../images/unsplash-dumbell_rack.jpg";
 
 const useStyles = makeStyles((theme) => ({
   section: {

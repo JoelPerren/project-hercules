@@ -1,10 +1,11 @@
 import React from "react";
 import { makeStyles, Toolbar } from "@material-ui/core";
+import Calendar from "./Calendar";
 
 const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(5),
   },
 }));
 
@@ -14,7 +15,7 @@ function Schedule() {
   return (
     <main className={classes.content}>
       <Toolbar />
-      <div>TestyTestTest</div>
+      <Calendar />
     </main>
   );
 }

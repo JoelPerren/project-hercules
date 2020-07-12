@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import AuthenticatedApp from "./AuthenticatedApp";
 import UnauthenticatedApp from "./UnauthenticatedApp";
-import { AuthContext } from "./context/AuthProvider";
+import { AuthContext } from "./context/auth/AuthProvider";
 
 const App = () => {
   const { userData } = useContext(AuthContext);

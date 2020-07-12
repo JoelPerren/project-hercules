@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
-import { authenticateUser } from "../utils/auth-client";
-import FullPageSpinner from "../pages/FullPageSpinner";
+import { authenticateUser } from "../../utils/auth-client";
+import FullPageSpinner from "../../pages/FullPageSpinner";
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext();

@@ -1,8 +1,8 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import { makeStyles, Toolbar } from "@material-ui/core";
-import SidebarNav from "../components/SidebarNav";
-import Schedule from "../components/Schedule";
+import { makeStyles, useMediaQuery, useTheme } from "@material-ui/core";
+import FixedSidebarNav from "../components/navbar/FixedSidebarNav";
+import Schedule from "../components/schedule/Schedule";
+import { Switch, Route } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,12 +12,17 @@ const useStyles = makeStyles((theme) => ({
 
 function Dashboard() {
   const classes = useStyles();
+  const theme = useTheme();
+  const largeViewport = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
     <div className={classes.root}>
-      <Navbar />
-      <SidebarNav />
-      <Schedule />
+      {largeViewport && <FixedSidebarNav />}
+      <Switch>
+        <Route exact path="/">
+          <Schedule />
+        </Route>
+      </Switch>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { AuthProvider } from "./client/context/AuthProvider";
+import { AuthProvider } from "./client/context/auth/AuthProvider";
 import App from "./client/App";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Cssbaseline from "@material-ui/core/CssBaseline";

@@ -7,8 +7,8 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
-import { AuthContext } from "../context/AuthProvider";
-import api from "../utils/api-client";
+import { AuthContext } from "../../context/auth/AuthProvider";
+import api from "../../utils/api-client";
 import { useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
 
