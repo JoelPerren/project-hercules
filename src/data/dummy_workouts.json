@@ -1,0 +1,156 @@
+[
+  {
+    "name": "Pull (Home workout)",
+    "exercises": [
+      {
+        "exercise": "Pull up",
+        "equipment": null,
+        "variation": null,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 6,
+        "duration": null,
+        "durationUnit": null,
+        "weight": "bodyweight",
+        "weightUnit": null
+      },
+      {
+        "exercise": "Chin up",
+        "equipment": null,
+        "variation": null,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 6,
+        "duration": null,
+        "durationUnit": null,
+        "weight": "bodyweight",
+        "weightUnit": null
+      },
+      {
+        "exercise": "Bentover row",
+        "equipment": 0,
+        "variation": null,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 8,
+        "duration": null,
+        "durationUnit": null,
+        "weight": 15,
+        "weightUnit": "kg"
+      },
+      {
+        "exercise": "Face up",
+        "equipment": null,
+        "variation": null,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 12,
+        "duration": null,
+        "durationUnit": null,
+        "weight": "bodyweight",
+        "weightUnit": null
+      },
+      {
+        "exercise": "Shrug",
+        "equipment": 0,
+        "variation": null,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 8,
+        "duration": null,
+        "durationUnit": null,
+        "weight": 20,
+        "weightUnit": "kg"
+      },
+      {
+        "exercise": "Bicep curl",
+        "equipment": 0,
+        "variation": null,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 10,
+        "duration": null,
+        "durationUnit": null,
+        "weight": 14,
+        "weightUnit": "kg"
+      },
+      {
+        "exercise": "Bicep curl",
+        "equipment": 0,
+        "variation": 0,
+        "displayName": "Hammer curl",
+        "numSets": 3,
+        "numReps": 10,
+        "duration": null,
+        "durationUnit": null,
+        "weight": 14,
+        "weightUnit": "kg"
+      },
+      {
+        "exercise": "Bicep curl",
+        "equipment": 0,
+        "variation": 1,
+        "displayName": "Inside hammer curl",
+        "numSets": 3,
+        "numReps": 5,
+        "duration": null,
+        "durationUnit": null,
+        "weight": 14,
+        "weightUnit": "kg"
+      }
+    ]
+  },
+  {
+    "name": "Legs (Home workout)",
+    "exercises": [
+      {
+        "exercise": "Squat",
+        "equipment": 0,
+        "variation": 0,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 10,
+        "duration": null,
+        "durationUnit": null,
+        "weight": 20,
+        "weightUnit": "kg"
+      },
+      {
+        "exercise": "Deadlift",
+        "equipment": 0,
+        "variation": 0,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 8,
+        "duration": null,
+        "durationUnit": null,
+        "weight": 15,
+        "weightUnit": "kg"
+      },
+      {
+        "exercise": "Squat",
+        "equipment": null,
+        "variation": 1,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 12,
+        "duration": null,
+        "durationUnit": null,
+        "weight": "bodyweight",
+        "weightUnit": null
+      },
+      {
+        "exercise": "Calf raises",
+        "equipment": null,
+        "variation": null,
+        "displayName": null,
+        "numSets": 3,
+        "numReps": 12,
+        "duration": null,
+        "durationUnit": null,
+        "weight": "bodyweight",
+        "weightUnit": null
+      }
+    ]
+  }
+]
