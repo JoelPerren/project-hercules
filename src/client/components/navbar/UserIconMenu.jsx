@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
-import { IconButton, Menu, MenuItem } from "@material-ui/core";
-import { AuthContext } from "../../context/auth/AuthProvider";
-import { logout } from "../../utils/auth-client";
-import UserIcon from "../common/UserIcon";
+import React, { useState, useContext } from 'react';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import { AuthContext } from '../../context/auth/AuthProvider';
+import { logout } from '../../utils/auth-client';
+import UserIcon from '../common/UserIcon';
 
 function UserIconMenu() {
   const { setUserData } = useContext(AuthContext);

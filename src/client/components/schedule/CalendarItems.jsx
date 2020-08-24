@@ -1,25 +1,26 @@
-import React from "react";
-import { makeStyles, Grid } from "@material-ui/core";
-import moment from "moment";
-import "moment/locale/en-gb";
+import React from 'react';
+import PropType from 'prop-types';
+import { makeStyles, Grid } from '@material-ui/core';
+import moment from 'moment';
+import 'moment/locale/en-gb';
 
 const useStyles = makeStyles((theme) => ({
   calendar: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     color: theme.palette.text.secondary,
   },
   itemContainer: {
-    flexWrap: "nowrap",
+    flexWrap: 'nowrap',
   },
   dateCircle: {
     background: theme.palette.background.paper,
-    height: "45px",
-    width: "45px",
-    textAlign: "center",
-    lineHeight: "45px",
-    borderRadius: "50%",
+    height: '45px',
+    width: '45px',
+    textAlign: 'center',
+    lineHeight: '45px',
+    borderRadius: '50%',
     marginBottom: theme.spacing(4),
   },
   dateCircleToday: {
@@ -33,9 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
   workoutItem: {
     background: theme.palette.background.paper,
-    width: "100%",
-    borderRadius: "10px",
-    padding: "10px",
+    width: '100%',
+    borderRadius: '10px',
+    padding: '10px',
     marginBottom: theme.spacing(2),
   },
   workoutItemToday: { background: theme.palette.secondary.main },
@@ -45,20 +46,20 @@ function CalendarItems({ date }) {
   const classes = useStyles();
 
   const getWeekDates = () => {
-    const weekStart = date.clone().startOf("isoWeek");
+    const weekStart = date.clone().startOf('isoWeek');
 
-    let weekDates = [];
+    const weekDates = [];
 
-    for (let i = 0; i < 7; i++) {
-      weekDates.push(moment(weekStart).add(i, "d"));
+    for (let i = 0; i < 7; i += 1) {
+      weekDates.push(moment(weekStart).add(i, 'd'));
     }
     return weekDates;
   };
 
   const calendarItems = getWeekDates().map((momentDate) => {
-    let active = moment().isSame(momentDate, "d");
-    let weekday = momentDate.format("ddd").toUpperCase();
-    let date = momentDate.format("D");
+    const active = moment().isSame(momentDate, 'd');
+    const weekday = momentDate.format('ddd').toUpperCase();
+    const dayOfMonth = momentDate.format('D');
 
     return (
       <Grid
@@ -79,7 +80,7 @@ function CalendarItems({ date }) {
               : `${classes.dateCircle}`
           }
         >
-          {date}
+          {dayOfMonth}
         </div>
         <div
           className={
@@ -109,5 +110,9 @@ function CalendarItems({ date }) {
     </Grid>
   );
 }
+
+CalendarItems.propTypes = {
+  date: PropType.instanceOf(Date).isRequired,
+};
 
 export default CalendarItems;

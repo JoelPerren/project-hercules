@@ -1,7 +1,7 @@
-import React from "react";
-import { makeStyles, Typography } from "@material-ui/core";
+import React from 'react';
+import { makeStyles, Typography } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   hero_heading: {
     marginBottom: 40,
   },
@@ -14,12 +14,12 @@ function HeroText() {
       <Typography
         variant="h2"
         color="primary"
-        gutterBottom={true}
+        gutterBottom
         className={classes.hero_heading}
       >
         Program your workouts to achieve peak performance
       </Typography>
-      <Typography variant="body1" paragraph={true}>
+      <Typography variant="body1" paragraph>
         Hercules is a simple and beautiful workout planner offering you all of
         the tools you need to take your training to the next level and achieve
         your full potential.

@@ -1,7 +1,7 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import AuthenticatedNavbar from "./components/navbar/AuthenticatedNavbar";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import AuthenticatedNavbar from './components/navbar/AuthenticatedNavbar';
 
 function AuthenticatedApp() {
   return (

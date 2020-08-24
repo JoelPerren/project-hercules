@@ -1,6 +1,6 @@
-import React from "react";
-import { makeStyles, Typography } from "@material-ui/core";
-import { ReactComponent as LogoSvg } from "../../svg/dark-logo.svg";
+import React from 'react';
+import { makeStyles, Typography } from '@material-ui/core';
+import { ReactComponent as LogoSvg } from '../../svg/dark-logo.svg';
 
 const useStyles = makeStyles((theme) => ({
   logo: {

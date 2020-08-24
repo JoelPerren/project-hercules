@@ -1,19 +1,19 @@
-import config from "./config";
+import config from './config';
 
 function api(
   path,
-  method = "GET",
+  method = 'GET',
   body = null,
   requiresAuth = false,
-  credentials = null
+  credentials = null,
 ) {
   const url = config.apiBaseUrl + path;
 
   const options = {
     method,
-    credentials: "include",
+    credentials: 'include',
     headers: {
-      "Content-Type": "application/json; charset=utf-8",
+      'Content-Type': 'application/json; charset=utf-8',
     },
   };
 
@@ -22,7 +22,7 @@ function api(
   }
 
   if (requiresAuth) {
-    options.headers["Authorization"] = credentials;
+    options.headers.Authorization = credentials;
   }
   return fetch(url, options);
 }

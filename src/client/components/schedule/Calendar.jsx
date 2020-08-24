@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from "react";
-import { makeStyles } from "@material-ui/core";
-import moment from "moment";
-import "moment/locale/en-gb";
-import CalendarControls from "./CalendarControls";
-import CalendarItems from "./CalendarItems";
+import React, { useState, useMemo } from 'react';
+import { makeStyles } from '@material-ui/core';
+import moment from 'moment';
+import 'moment/locale/en-gb';
+import CalendarControls from './CalendarControls';
+import CalendarItems from './CalendarItems';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
   },
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 function Calendar() {
   const classes = useStyles();
   const [weeksFromToday, setWeeksFromToday] = useState(0);
-  const date = useMemo(() => moment().add(weeksFromToday, "w"), [
+  const date = useMemo(() => moment().add(weeksFromToday, 'w'), [
     weeksFromToday,
   ]);
 

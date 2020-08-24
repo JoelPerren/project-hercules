@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   makeStyles,
   Grid,
   Typography,
   IconButton,
   Button,
-} from "@material-ui/core";
-import "moment/locale/en-gb";
-import ArrowBackIosOutlinedIcon from "@material-ui/icons/ArrowBackIosOutlined";
-import ArrowForwardIosOutlinedIcon from "@material-ui/icons/ArrowForwardIosOutlined";
+} from '@material-ui/core';
+import 'moment/locale/en-gb';
+import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
+import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,20 +22,20 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   controls: {
-    flexBasis: "auto",
+    flexBasis: 'auto',
     flexGrow: 0,
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
   },
   label: {
     marginRight: theme.spacing(1),
   },
-  typeButton: { minWidth: "70px" },
+  typeButton: { minWidth: '70px' },
 }));
 
 function CalendarControls({ weeksFromToday, setWeeksFromToday, date }) {
   const classes = useStyles();
-  const [view, setView] = useState("Week");
+  const [view, setView] = useState('Week');
 
   const backAWeek = () => {
     setWeeksFromToday(weeksFromToday - 1);
@@ -46,29 +47,29 @@ function CalendarControls({ weeksFromToday, setWeeksFromToday, date }) {
 
   const toggleView = () => {
     switch (view) {
-      case "Week":
-        setView("Month");
+      case 'Week':
+        setView('Month');
         break;
-      case "Month":
-        setView("Day");
+      case 'Month':
+        setView('Day');
         break;
-      case "Day":
-        setView("Week");
+      case 'Day':
+        setView('Week');
         break;
       default:
         break;
     }
   };
 
-  const label = () => {
-    let monthAtStartOfWeek = date.clone().startOf("w").format("MMM");
-    let monthAtEndOfWeek = date.clone().endOf("w").format("MMM");
+  const monthLabel = () => {
+    const monthAtStartOfWeek = date.clone().startOf('w').format('MMM');
+    const monthAtEndOfWeek = date.clone().endOf('w').format('MMM');
     let label;
     if (monthAtStartOfWeek === monthAtEndOfWeek) {
-      label = `${date.format("MMMM")} ${date.format("YYYY")}`;
+      label = `${date.format('MMMM')} ${date.format('YYYY')}`;
     } else {
       label = `${monthAtStartOfWeek} — ${monthAtEndOfWeek} ${date.format(
-        "YYYY"
+        'YYYY',
       )}`;
     }
 
@@ -84,11 +85,11 @@ function CalendarControls({ weeksFromToday, setWeeksFromToday, date }) {
       </Grid>
       <Grid item xs className={classes.controls}>
         <Typography
-          color={"textSecondary"}
+          color="textSecondary"
           display="inline"
           className={classes.label}
         >
-          {label()}
+          {monthLabel()}
         </Typography>
         <IconButton size="small" color="primary" onClick={backAWeek}>
           <ArrowBackIosOutlinedIcon />
@@ -107,5 +108,11 @@ function CalendarControls({ weeksFromToday, setWeeksFromToday, date }) {
     </Grid>
   );
 }
+
+CalendarControls.propTypes = {
+  weeksFromToday: PropTypes.number.isRequired,
+  setWeeksFromToday: PropTypes.func.isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
+};
 
 export default CalendarControls;

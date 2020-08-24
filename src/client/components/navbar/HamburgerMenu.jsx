@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import MenuIcon from "@material-ui/icons/Menu";
-import { IconButton, makeStyles, Drawer } from "@material-ui/core";
-import Logo from "../common/Logo";
-import SidebarNavContent from "./SidebarNavContent";
+import React, { useState } from 'react';
+import MenuIcon from '@material-ui/icons/Menu';
+import { IconButton, makeStyles, Drawer } from '@material-ui/core';
+import Logo from '../common/Logo';
+import SidebarNavContent from './SidebarNavContent';
 
 const drawerWidth = 250;
 
@@ -19,9 +19,9 @@ const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(2),
     paddingBottom: theme.spacing(1),
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }));
 
@@ -30,7 +30,7 @@ function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDrawer = (e) => {
-    if (e.type === "keydown" && (e.key === "Tab" || e.key === "Shift")) {
+    if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
       return;
     }
 
@@ -39,7 +39,7 @@ function HamburgerMenu() {
 
   return (
     <div className={classes.root}>
-      <IconButton edge={"start"} onClick={toggleDrawer}>
+      <IconButton edge="start" onClick={toggleDrawer}>
         <MenuIcon />
       </IconButton>
       <Drawer

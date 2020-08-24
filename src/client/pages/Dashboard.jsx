@@ -1,19 +1,19 @@
-import React from "react";
-import { makeStyles, useMediaQuery, useTheme } from "@material-ui/core";
-import FixedSidebarNav from "../components/navbar/FixedSidebarNav";
-import Schedule from "../components/schedule/Schedule";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
+import { Switch, Route } from 'react-router-dom';
+import FixedSidebarNav from '../components/navbar/FixedSidebarNav';
+import Schedule from '../components/schedule/Schedule';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
-    display: "flex",
+    display: 'flex',
   },
 }));
 
 function Dashboard() {
   const classes = useStyles();
   const theme = useTheme();
-  const largeViewport = useMediaQuery(theme.breakpoints.up("lg"));
+  const largeViewport = useMediaQuery(theme.breakpoints.up('lg'));
 
   return (
     <div className={classes.root}>

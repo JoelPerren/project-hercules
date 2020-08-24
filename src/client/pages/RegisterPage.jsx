@@ -1,13 +1,13 @@
-import React from "react";
-import { makeStyles, Container } from "@material-ui/core";
-import SignupForm from "../components/landingpage/SignupForm";
+import React from 'react';
+import { makeStyles, Container } from '@material-ui/core';
+import SignupForm from '../components/landingpage/SignupForm';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
 

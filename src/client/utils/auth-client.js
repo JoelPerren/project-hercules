@@ -1,41 +1,17 @@
-import api from "./api-client";
-import Cookies from "js-cookie";
-
-async function authenticateUser(userDetails) {
-  userDetails.isAuthenticated = false;
-
-  if (userDetails.accessToken) {
-    userDetails = await authenticateByAccessToken(userDetails);
-  }
-
-  if (!userDetails.isAuthenticated && userDetails.refreshToken) {
-    userDetails = await authenticateByRefreshToken(userDetails);
-  }
-
-  if (!userDetails.isAuthenticated) {
-    userDetails = {
-      isAuthenticated: false,
-      email: "",
-      name: "",
-      accessToken: null,
-      refreshToken: null,
-    };
-  }
-
-  return userDetails;
-}
+import Cookies from 'js-cookie';
+import api from './api-client';
 
 async function authenticateByAccessToken(userDetails) {
-  const accessToken = userDetails.accessToken;
+  const { accessToken } = userDetails;
   let modifiedDetails;
 
   try {
     const response = await api(
-      "/users/authenticate-with-access-token",
-      "GET",
+      '/users/authenticate-with-access-token',
+      'GET',
       null,
       true,
-      accessToken
+      accessToken,
     );
 
     if (response.status !== 200) {
@@ -61,7 +37,7 @@ async function authenticateByRefreshToken(userDetails) {
   let modifiedDetails;
 
   try {
-    const response = await api("/users/authenticate-with-refresh-token", "GET");
+    const response = await api('/users/authenticate-with-refresh-token', 'GET');
 
     if (response.status !== 200) {
       return userDetails;
@@ -75,7 +51,7 @@ async function authenticateByRefreshToken(userDetails) {
       email: jsonResponse.email,
       name: jsonResponse.name,
       accessToken: jsonResponse.accessToken,
-      refreshToken: Cookies.get("refreshToken"),
+      refreshToken: Cookies.get('refreshToken'),
     };
 
     return modifiedDetails;
@@ -84,16 +60,42 @@ async function authenticateByRefreshToken(userDetails) {
   }
 }
 
+async function authenticateUser(userDetails) {
+  let modifiedDetails = userDetails;
+
+  modifiedDetails.isAuthenticated = false;
+
+  if (modifiedDetails.accessToken) {
+    modifiedDetails = await authenticateByAccessToken(modifiedDetails);
+  }
+
+  if (!modifiedDetails.isAuthenticated && modifiedDetails.refreshToken) {
+    modifiedDetails = await authenticateByRefreshToken(modifiedDetails);
+  }
+
+  if (!modifiedDetails.isAuthenticated) {
+    modifiedDetails = {
+      isAuthenticated: false,
+      email: '',
+      name: '',
+      accessToken: null,
+      refreshToken: null,
+    };
+  }
+
+  return modifiedDetails;
+}
+
 function logout() {
   const userDetails = {
     isAuthenticated: false,
-    email: "",
-    name: "",
+    email: '',
+    name: '',
     accessToken: null,
     refreshToken: null,
   };
 
-  Cookies.remove("refreshToken");
+  Cookies.remove('refreshToken');
   return userDetails;
 }
 

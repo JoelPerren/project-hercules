@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../context/auth/AuthProvider";
+import React, { useState, useContext } from 'react';
 import {
   makeStyles,
   Card,
@@ -8,20 +7,21 @@ import {
   TextField,
   Button,
   Container,
-} from "@material-ui/core";
-import api from "../utils/api-client";
-import { useHistory } from "react-router-dom";
-import Cookies from "js-cookie";
+} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import api from '../utils/api-client';
+import { AuthContext } from '../context/auth/AuthProvider';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   login_box: {
-    maxWidth: "450px",
+    maxWidth: '450px',
   },
   login_button: {
     marginTop: theme.spacing(1),
@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
 function LoginPage() {
   const classes = useStyles();
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const { setUserData } = useContext(AuthContext);
   const history = useHistory();
@@ -49,7 +49,7 @@ function LoginPage() {
       password: values.password,
     };
 
-    const response = await api("/users/login", "POST", body);
+    const response = await api('/users/login', 'POST', body);
 
     if (response.status !== 200) {
       return;
@@ -61,7 +61,7 @@ function LoginPage() {
       email: jsonResponse.email,
       name: jsonResponse.name,
       accessToken: jsonResponse.accessToken,
-      refreshToken: Cookies.get("refreshToken"),
+      refreshToken: Cookies.get('refreshToken'),
     });
 
     history.goBack();
@@ -72,14 +72,14 @@ function LoginPage() {
       <form className={classes.login_box} onSubmit={handleSubmit}>
         <Card>
           <CardContent>
-            <Typography variant="h6" gutterBottom={true}>
+            <Typography variant="h6" gutterBottom>
               Login
             </Typography>
             <TextField
               id="email"
               name="email"
               label="Email"
-              fullWidth={true}
+              fullWidth
               size="small"
               variant="outlined"
               margin="dense"
@@ -91,7 +91,7 @@ function LoginPage() {
               name="password"
               label="Password"
               type="password"
-              fullWidth={true}
+              fullWidth
               size="small"
               variant="outlined"
               margin="dense"
@@ -100,7 +100,7 @@ function LoginPage() {
             />
             <Button
               color="primary"
-              fullWidth={true}
+              fullWidth
               size="large"
               variant="contained"
               type="submit"

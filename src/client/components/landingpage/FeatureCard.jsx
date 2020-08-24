@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardContent,
@@ -6,11 +7,11 @@ import {
   CardHeader,
   Avatar,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   feature_card: {
-    width: "100%",
+    width: '100%',
   },
   avatar_icon: {
     color: theme.palette.getContrastText(theme.palette.secondary.main),
@@ -18,18 +19,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function FeatureCard({ icon, heading, content }) {
+function FeatureCard({
+  id,
+  icon,
+  heading,
+  content,
+}) {
   const classes = useStyles();
   return (
     <Card className={classes.feature_card}>
       <CardHeader
         avatar={<Avatar className={classes.avatar_icon}>{icon}</Avatar>}
-        disableTypography={true}
+        disableTypography
         title={<Typography variant="h6">{heading}</Typography>}
-      ></CardHeader>
+      />
       <CardContent>
-        {content.map((para, index) => (
-          <Typography paragraph={true} key={index}>
+        {content.map((para) => (
+          <Typography paragraph key={id}>
             {para}
           </Typography>
         ))}
@@ -37,5 +43,12 @@ function FeatureCard({ icon, heading, content }) {
     </Card>
   );
 }
+
+FeatureCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  icon: PropTypes.element.isRequired,
+  heading: PropTypes.string.isRequired,
+  content: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default FeatureCard;

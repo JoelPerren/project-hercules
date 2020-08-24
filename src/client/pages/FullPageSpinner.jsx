@@ -1,14 +1,14 @@
-import React from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { makeStyles, Container, Typography } from "@material-ui/core";
+import React from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles, Container, Typography } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
 }));
 function FullPageSpinner() {
@@ -16,7 +16,7 @@ function FullPageSpinner() {
 
   return (
     <Container className={classes.root}>
-      <Typography variant="h2" gutterBottom={true}>
+      <Typography variant="h2" gutterBottom>
         Hercules
       </Typography>
       <CircularProgress size={60} thickness={5} />

@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
-import { makeStyles, Typography, Paper } from "@material-ui/core";
-import UserIcon from "../common/UserIcon";
-import { AuthContext } from "../../context/auth/AuthProvider";
+import React, { useContext } from 'react';
+import { makeStyles, Typography, Paper } from '@material-ui/core';
+import UserIcon from '../common/UserIcon';
+import { AuthContext } from '../../context/auth/AuthProvider';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "150px",
-    margin: "auto",
+    width: '150px',
+    margin: 'auto',
     background: theme.palette.background.default,
     padding: theme.spacing(2),
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
-    textAlign: "center",
+    textAlign: 'center',
   },
   icon: {
-    display: "flex",
-    justifyContent: "center",
+    display: 'flex',
+    justifyContent: 'center',
   },
   username: {
     marginTop: theme.spacing(2),

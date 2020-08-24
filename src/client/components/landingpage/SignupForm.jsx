@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext } from 'react';
 import {
   makeStyles,
   Card,
@@ -6,15 +6,15 @@ import {
   Typography,
   TextField,
   Button,
-} from "@material-ui/core";
-import { AuthContext } from "../../context/auth/AuthProvider";
-import api from "../../utils/api-client";
-import { useHistory } from "react-router-dom";
-import Cookies from "js-cookie";
+} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { AuthContext } from '../../context/auth/AuthProvider';
+import api from '../../utils/api-client';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   hero_box: {
-    maxWidth: "450px",
+    maxWidth: '450px',
   },
   form_signup_btn: {
     marginTop: 10,
@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
 function SignupForm() {
   const classes = useStyles();
   const [values, setValues] = useState({
-    userName: "",
-    email: "",
-    password: "",
+    userName: '',
+    email: '',
+    password: '',
   });
   const { setUserData } = useContext(AuthContext);
   const history = useHistory();
@@ -45,7 +45,7 @@ function SignupForm() {
       password: values.password,
     };
 
-    const response = await api("/users/register", "POST", body);
+    const response = await api('/users/register', 'POST', body);
 
     if (response.status !== 200) {
       return;
@@ -57,7 +57,7 @@ function SignupForm() {
       email: jsonResponse.email,
       name: jsonResponse.name,
       accessToken: jsonResponse.accessToken,
-      refreshToken: Cookies.get("refreshToken"),
+      refreshToken: Cookies.get('refreshToken'),
     });
 
     history.goBack();
@@ -67,14 +67,14 @@ function SignupForm() {
     <form className={classes.hero_box} onSubmit={handleSubmit}>
       <Card>
         <CardContent>
-          <Typography variant="h6" gutterBottom={true}>
+          <Typography variant="h6" gutterBottom>
             Sign Up
           </Typography>
           <TextField
             id="user-name"
             name="userName"
             label="Full Name"
-            fullWidth={true}
+            fullWidth
             size="small"
             variant="outlined"
             margin="dense"
@@ -85,7 +85,7 @@ function SignupForm() {
             id="email"
             name="email"
             label="Email"
-            fullWidth={true}
+            fullWidth
             size="small"
             variant="outlined"
             margin="dense"
@@ -97,7 +97,7 @@ function SignupForm() {
             name="password"
             label="Password"
             type="password"
-            fullWidth={true}
+            fullWidth
             size="small"
             variant="outlined"
             margin="dense"
@@ -107,7 +107,7 @@ function SignupForm() {
           />
           <Button
             color="primary"
-            fullWidth={true}
+            fullWidth
             size="large"
             variant="contained"
             type="submit"

@@ -1,17 +1,18 @@
-import React, { createContext, useState, useEffect } from "react";
-import { authenticateUser } from "../../utils/auth-client";
-import FullPageSpinner from "../../pages/FullPageSpinner";
-import Cookies from "js-cookie";
+import React, { createContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
+import { authenticateUser } from '../../utils/auth-client';
+import FullPageSpinner from '../../pages/FullPageSpinner';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(undefined, undefined);
 
+// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState({
     isAuthenticated: false,
-    email: "",
-    name: "",
+    email: '',
+    name: '',
     accessToken: null,
-    refreshToken: Cookies.get("refreshToken"),
+    refreshToken: Cookies.get('refreshToken'),
   });
   const [loading, setLoading] = useState(true);
 
@@ -21,11 +22,9 @@ export const AuthProvider = ({ children }) => {
         const response = await authenticateUser(userData);
         setUserData(response);
       }
-
-      setLoading(false);
     }
-    fetchUserData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchUserData()
+      .then(() => setLoading(false));
   }, []);
 
   if (loading) {
@@ -35,8 +34,8 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        userData: userData,
-        setUserData: setUserData,
+        userData,
+        setUserData,
       }}
     >
       {children}
