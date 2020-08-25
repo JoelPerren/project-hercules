@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-mongoose.set("useFindAndModify", false);
+const mongoose = require('mongoose');
+
+mongoose.set('useFindAndModify', false);
 
 async function connectDB() {
   try {

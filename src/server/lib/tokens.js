@@ -1,13 +1,13 @@
-const jsonwebtoken = require("jsonwebtoken");
-const path = require("path");
-const fs = require("fs");
-const crypto = require("crypto");
+const jsonwebtoken = require('jsonwebtoken');
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 
-const pathToKey = path.join(__dirname, "..", "config", "id_rsa_priv.pem");
-const PRIV_KEY = fs.readFileSync(pathToKey, "utf8");
+const pathToKey = path.join(__dirname, '..', 'config', 'id_rsa_priv.pem');
+const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
 
 const issueJWT = (user) => {
-  const _id = user._id;
+  const { _id } = user;
   const expiresIn = 900; // 15 minutes in seconds
 
   const payload = {
@@ -16,19 +16,17 @@ const issueJWT = (user) => {
   };
 
   const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {
-    expiresIn: expiresIn,
-    algorithm: "RS256",
+    expiresIn,
+    algorithm: 'RS256',
   });
 
   return {
-    token: "Bearer " + signedToken,
+    token: `Bearer ${signedToken}`,
     expires: expiresIn,
   };
 };
 
-const issueRefToken = () => {
-  return crypto.randomBytes(16).toString("hex");
-};
+const issueRefToken = () => crypto.randomBytes(16).toString('hex');
 
 module.exports.issueJWT = issueJWT;
 module.exports.issueRefToken = issueRefToken;
