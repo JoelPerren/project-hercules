@@ -8,9 +8,9 @@ export const AuthContext = createContext(undefined, undefined);
 // eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState({
-    isAuthenticated: false,
-    email: '',
-    name: '',
+    isAuthenticated: true,
+    email: 'test@test.com',
+    name: 'Tester Extraordinaire',
     accessToken: null,
     refreshToken: Cookies.get('refreshToken'),
   });
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     }
     fetchUserData()
       .then(() => setLoading(false));
-  }, []);
+  }, [userData]);
 
   if (loading) {
     return <FullPageSpinner />;

@@ -1,8 +1,8 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { makeStyles, Grid } from '@material-ui/core';
 import moment from 'moment';
 import 'moment/locale/en-gb';
+import momentPropTypes from 'react-moment-proptypes';
 
 const useStyles = makeStyles((theme) => ({
   calendar: {
@@ -39,31 +39,33 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px',
     marginBottom: theme.spacing(2),
   },
-  workoutItemToday: { background: theme.palette.secondary.main },
+  workoutItemToday: {
+    background: theme.palette.secondary.main
+  },
 }));
 
-function CalendarItems({ date }) {
+function CalendarContentWeek({ currentDate, selectedDate }) {
   const classes = useStyles();
 
-  const getWeekDates = () => {
-    const weekStart = date.clone().startOf('isoWeek');
-
+  const getListOfWeekDates = () => {
+    const weekStart = selectedDate.clone().startOf('isoWeek');
     const weekDates = [];
 
     for (let i = 0; i < 7; i += 1) {
-      weekDates.push(moment(weekStart).add(i, 'd'));
+      weekDates.push(moment(weekStart).add(i, 'days'));
     }
+
     return weekDates;
   };
 
-  const calendarItems = getWeekDates().map((momentDate) => {
-    const active = moment().isSame(momentDate, 'd');
-    const weekday = momentDate.format('ddd').toUpperCase();
-    const dayOfMonth = momentDate.format('D');
+  const calendarItems = getListOfWeekDates().map((dayOfWeek) => {
+    const active = currentDate.isSame(dayOfWeek, 'd');
+    const formattedDayOfWeek = dayOfWeek.format('ddd').toUpperCase();
+    const dayOfMonth = dayOfWeek.format('D');
 
     return (
       <Grid
-        key={weekday}
+        key={formattedDayOfWeek}
         item
         xs
         className={
@@ -72,7 +74,7 @@ function CalendarItems({ date }) {
             : `${classes.calendar}`
         }
       >
-        <div className={classes.weekday}>{weekday}</div>
+        <div className={classes.weekday}>{formattedDayOfWeek}</div>
         <div
           className={
             active
@@ -105,14 +107,15 @@ function CalendarItems({ date }) {
   });
 
   return (
-    <Grid container spacing={3} className={classes.itemContainer}>
+    <Grid container spacing={3} className={classes.itemContainer} aria-label="week-calendar">
       {calendarItems}
     </Grid>
   );
 }
 
-CalendarItems.propTypes = {
-  date: PropType.instanceOf(Date).isRequired,
+CalendarContentWeek.propTypes = {
+  currentDate: momentPropTypes.momentObj.isRequired,
+  selectedDate: momentPropTypes.momentObj.isRequired,
 };
 
-export default CalendarItems;
+export default CalendarContentWeek;

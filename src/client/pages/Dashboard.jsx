@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles, useMediaQuery, useTheme } from '@material-ui/core';
 import { Switch, Route } from 'react-router-dom';
 import FixedSidebarNav from '../components/navbar/FixedSidebarNav';
-import Schedule from '../components/schedule/Schedule';
+import CalendarContainer from '../components/calendar/CalendarContainer';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,7 +20,7 @@ function Dashboard() {
       {largeViewport && <FixedSidebarNav />}
       <Switch>
         <Route exact path="/">
-          <Schedule />
+          <CalendarContainer />
         </Route>
       </Switch>
     </div>

@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es2020": true
+    "es2020": true,
+    "jest": true
   },
   "extends": [
     "plugin:react/recommended",
@@ -18,7 +19,7 @@
     "react"
   ],
   "rules": {
-	  "linebreak-style": ["error", "windows"],
+//	  "linebreak-style": ["error", "windows"],
     "no-console": "off"
   }
 }

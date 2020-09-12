@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   makeStyles,
@@ -10,11 +10,9 @@ import {
 import 'moment/locale/en-gb';
 import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined';
 import ArrowForwardIosOutlinedIcon from '@material-ui/icons/ArrowForwardIosOutlined';
+import momentPropTypes from 'react-moment-proptypes';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   header: {
     marginBottom: theme.spacing(2),
   },
@@ -30,47 +28,53 @@ const useStyles = makeStyles((theme) => ({
   label: {
     marginRight: theme.spacing(1),
   },
-  typeButton: { minWidth: '70px' },
+  typeButton: {
+    minWidth: '70px',
+  },
 }));
 
-function CalendarControls({ weeksFromToday, setWeeksFromToday, date }) {
+function CalendarControls({
+  selectedDate,
+  setSelectedDate,
+  viewMode,
+  setViewMode,
+}) {
   const classes = useStyles();
-  const [view, setView] = useState('Week');
 
-  const backAWeek = () => {
-    setWeeksFromToday(weeksFromToday - 1);
+  const goBackInTime = () => {
+    setSelectedDate(selectedDate.clone().subtract(1, `${viewMode}s`));
   };
 
-  const forwardAWeek = () => {
-    setWeeksFromToday(weeksFromToday + 1);
+  const goForwardInTime = () => {
+    setSelectedDate(selectedDate.clone().add(1, `${viewMode}s`));
   };
 
   const toggleView = () => {
-    switch (view) {
-      case 'Week':
-        setView('Month');
+    switch (viewMode) {
+      case 'month':
+        setViewMode('week');
         break;
-      case 'Month':
-        setView('Day');
-        break;
-      case 'Day':
-        setView('Week');
+      case 'week':
+        setViewMode('day');
         break;
       default:
+        setViewMode('month');
         break;
     }
   };
 
-  const monthLabel = () => {
-    const monthAtStartOfWeek = date.clone().startOf('w').format('MMM');
-    const monthAtEndOfWeek = date.clone().endOf('w').format('MMM');
+  const getDateLabel = () => {
     let label;
-    if (monthAtStartOfWeek === monthAtEndOfWeek) {
-      label = `${date.format('MMMM')} ${date.format('YYYY')}`;
+    if (viewMode === 'week') {
+      const monthAtStartOfWeek = selectedDate.clone().startOf('w').format('MMM');
+      const monthAtEndOfWeek = selectedDate.clone().endOf('w').format('MMM');
+      if (monthAtStartOfWeek === monthAtEndOfWeek) {
+        label = `${selectedDate.format('MMMM')} ${selectedDate.format('YYYY')}`;
+      } else {
+        label = `${monthAtStartOfWeek} — ${monthAtEndOfWeek} ${selectedDate.format('YYYY')}`;
+      }
     } else {
-      label = `${monthAtStartOfWeek} — ${monthAtEndOfWeek} ${date.format(
-        'YYYY',
-      )}`;
+      label = `${selectedDate.format('MMMM')} ${selectedDate.format('YYYY')}`;
     }
 
     return label;
@@ -89,19 +93,20 @@ function CalendarControls({ weeksFromToday, setWeeksFromToday, date }) {
           display="inline"
           className={classes.label}
         >
-          {monthLabel()}
+          {getDateLabel()}
         </Typography>
-        <IconButton size="small" color="primary" onClick={backAWeek}>
+        <IconButton size="small" color="primary" onClick={goBackInTime} aria-label="back">
           <ArrowBackIosOutlinedIcon />
         </IconButton>
         <Button
           color="primary"
           onClick={toggleView}
           className={classes.typeButton}
+          aria-label="changeView"
         >
-          {view}
+          {viewMode}
         </Button>
-        <IconButton size="small" color="primary" onClick={forwardAWeek}>
+        <IconButton size="small" color="primary" onClick={goForwardInTime} aria-label="forward">
           <ArrowForwardIosOutlinedIcon />
         </IconButton>
       </Grid>
@@ -110,9 +115,10 @@ function CalendarControls({ weeksFromToday, setWeeksFromToday, date }) {
 }
 
 CalendarControls.propTypes = {
-  weeksFromToday: PropTypes.number.isRequired,
-  setWeeksFromToday: PropTypes.func.isRequired,
-  date: PropTypes.instanceOf(Date).isRequired,
+  selectedDate: momentPropTypes.momentObj.isRequired,
+  setSelectedDate: PropTypes.func.isRequired,
+  viewMode: PropTypes.string.isRequired,
+  setViewMode: PropTypes.func.isRequired,
 };
 
 export default CalendarControls;
