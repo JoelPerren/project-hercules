@@ -5,12 +5,9 @@ module.exports = {
       '@typescript-eslint',
     ],
     extends: [
-        'airbnb-typescript/base'
+        'airbnb-typescript'
     ],
     parserOptions: {
         project: './tsconfig.json'
-    },
-    rules: {
-        "@typescript-eslint/indent": 0
     }
 };
