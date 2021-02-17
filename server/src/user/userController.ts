@@ -1,10 +1,24 @@
-import express = require('express');
-import UsersPostRequest = require('./usersPostRequest');
+import { Request, Response, NextFunction } from 'express';
+import { User } from './user';
+import UserService from './userService';
 
-const userController: express.Router = express.Router();
+class UserController {
+    public userService = new UserService();
 
-userController.post('', (req: express.Request, res: express.Response) => {
-    const userRequest: UsersPostRequest = req.body;
-});
+    public createUser = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) => {
+        const userData: User = req.body;
 
-export = userController;
+        try {
+            const createdUserData: User = await this.userService.createUser;
+            res.status(201).json({ message: 'created', data: createdUserData });
+        } catch (error) {
+            next(error);
+        }
+    };
+}
+
+export default UserController;

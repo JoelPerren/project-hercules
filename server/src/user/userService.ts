@@ -1,18 +1,16 @@
-import bcryptjs = require('bcryptjs');
-import User = require('./user');
-import UserInterfaces = require('./userTsInterfaces');
-import logger = require('../config/winstonConfig');
+import { User } from './user';
+import userModel from './userModel';
 
-namespace UserService {
+class UserService {
+    public userModel = userModel;
 
-    export const createUser = (request: UserInterfaces.UsersPostRequest) => {
-        request.password = bcryptjs.hashSync(request.password);
-        const newUser = new User(request);
-        newUser.save()
-            .then((user) => user)
-            .catch((error) => logger.error(error.message));
-    };
+    public async createUser(userData: User): Promise<User> {
+        const findUser: User = await this.userModel.findOne({
+            email: userData.email,
+        });
 
+        return findUser;
+    }
 }
 
-export = UserService;
+export default UserService;

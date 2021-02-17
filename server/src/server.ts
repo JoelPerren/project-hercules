@@ -1,9 +1,9 @@
-import express = require('express');
-import cors = require('cors');
-import connectToDatabase = require('./config/databaseConfig');
-import logger = require('./config/winstonConfig');
-import envConfig = require('./config/environmentConfig');
-import userController = require('./user/userController');
+import express from 'express';
+import cors from 'cors';
+import connectToDatabase from './config/databaseConfig';
+import logger from './config/loggerConfig';
+import envConfig from './config/environmentConfig';
+import userRoutes from './user/userRoutes';
 
 const app: express.Application = express();
 
@@ -12,7 +12,7 @@ app.use(cors());
 
 connectToDatabase();
 
-app.use('/users', userController);
+app.use('/users', userRoutes);
 
 app.listen(envConfig.port, () => {
     logger.info(`Application started on port ${envConfig.port}`);

@@ -1,11 +1,13 @@
-import mongoose from 'mongoose';
-import UserInterfaces = require('./userTsInterfaces');
+import { IsEmail, IsString, MinLength } from 'class-validator';
 
-const UserSchema = new mongoose.Schema({
-    name: String,
-    email: { type: String, unique: true },
-    password: String,
-});
+export class User {
+    @IsString()
+    public userName: string;
 
-const User = mongoose.model<UserInterfaces.IUser>('User', UserSchema);
-export = User;
+    @IsEmail()
+    public email: string;
+
+    @IsString()
+    @MinLength(8)
+    public password: string;
+}

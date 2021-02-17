@@ -1,11 +1,11 @@
-import winston = require('winston');
+import winston from 'winston';
 
 const logFormat: winston.Logform.Format = winston.format.combine(
     winston.format.colorize(),
     winston.format.timestamp(),
     winston.format.align(),
     winston.format.printf(
-        (info) => `${info.timestamp} - ${info.level}: ${info.message}`,
+        info => `${info.timestamp} - ${info.level}: ${info.message}`,
     ),
 );
 
