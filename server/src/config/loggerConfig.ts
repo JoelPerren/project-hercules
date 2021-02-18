@@ -4,9 +4,8 @@ const logFormat: winston.Logform.Format = winston.format.combine(
     winston.format.colorize(),
     winston.format.timestamp(),
     winston.format.align(),
-    winston.format.printf(
-        info => `${info.timestamp} - ${info.level}: ${info.message}`,
-    ),
+    winston.format.errors({ stack: true }),
+    winston.format.printf(info => `${info.timestamp} - ${info.level}: ${info.message}`),
 );
 
 const logger: winston.Logger = winston.createLogger({

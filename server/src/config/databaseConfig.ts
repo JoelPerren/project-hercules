@@ -7,13 +7,10 @@ const connectToDatabase = (): void => {
         .connect(envConfig.mongoConnectionString, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            useCreateIndex: true,
         })
-        .then(conn =>
-            logger.info(`Connected to MongoDB: ${conn.connection.host}`),
-        )
-        .catch(error =>
-            logger.error(`Error connecting to MongoDB: ${error.message}`),
-        );
+        .then(conn => logger.info(`Connected to MongoDB: ${conn.connection.host}`))
+        .catch(error => logger.error(`Error connecting to MongoDB: ${error.message}`));
 };
 
 export default connectToDatabase;

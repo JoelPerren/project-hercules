@@ -5,7 +5,7 @@
     "description": "Project Hercules server-side code",
     "main": "src/server.js",
     "scripts": {
-        "start": "tsc && node build/server.js",
+        "start": "tsc && node --trace-deprecation build/server.js",
         "build": "tsc",
         "test": ""
     },
